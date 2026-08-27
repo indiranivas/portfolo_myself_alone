@@ -92,34 +92,3 @@ export function MobileDock() {
     </div>
   )
 }
-
-export function Preloader() {
-  const { data } = usePortfolio()
-  const [visible, setVisible] = useState(true)
-  const [gone, setGone] = useState(false)
-  const reduce = useReducedMotion()
-
-  useEffect(() => {
-    const hideAt = reduce ? 200 : 900
-    const removeAt = reduce ? 280 : 1300
-    const t1 = window.setTimeout(() => setVisible(false), hideAt)
-    const t2 = window.setTimeout(() => setGone(true), removeAt)
-    return () => {
-      window.clearTimeout(t1)
-      window.clearTimeout(t2)
-    }
-  }, [reduce])
-
-  if (gone) return null
-
-  return (
-    <div
-      aria-hidden
-      className={`fixed inset-0 z-[100] bg-ink grid place-items-center pointer-events-none transition-opacity ${
-        reduce ? 'duration-100' : 'duration-500'
-      } ${visible ? 'opacity-100' : 'opacity-0'}`}
-    >
-      <p className="font-script text-6xl text-hot">{data.name.split(' ')[0].toLowerCase()}</p>
-    </div>
-  )
-}

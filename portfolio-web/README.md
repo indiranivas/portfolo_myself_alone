@@ -35,16 +35,16 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+Open [http://localhost:5173](http://localhost:5173) — one process serves the React UI and `/api` together.
 
 ## Build for Production
 
 ```bash
 npm run build
-npm run preview
+npm start
 ```
 
-Deploy the `dist/` folder to Vercel, Netlify, or GitHub Pages.
+Serves the built site + API on [http://localhost:3000](http://localhost:3000).
 
 ## Tech Stack
 

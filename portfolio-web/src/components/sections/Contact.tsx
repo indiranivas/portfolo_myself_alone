@@ -15,7 +15,10 @@ export function Contact() {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          subject: 'Portfolio inquiry',
+        }),
       })
       if (!res.ok) throw new Error('fail')
       setStatus('ok')
