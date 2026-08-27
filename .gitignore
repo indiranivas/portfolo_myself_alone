@@ -1,0 +1,24 @@
+# Dependencies & build
+**/node_modules/
+**/dist/
+**/.vite/
+
+# Env & secrets
+**/.env
+**/.env.local
+!**/.env.example
+
+# Runtime CMS data (regenerated locally)
+portfolio-web/server/data/users.json
+portfolio-web/server/data/messages.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+
+# Cursor local skill cache (keep design-system)
+portfolio-web/.cursor/
+
+# Unrelated starter
+python-getting-started/
