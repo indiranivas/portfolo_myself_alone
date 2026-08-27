@@ -1,4 +1,3 @@
-import { useCallback, useState } from 'react'
 import { SiteNav, MobileDock } from '../components/layout/SiteNav'
 import { Preloader } from '../components/layout/Preloader'
 import { SiteFooter } from '../components/layout/SiteFooter'
@@ -13,15 +12,12 @@ import { Awards } from '../components/sections/Awards'
 import { Contact } from '../components/sections/Contact'
 
 export function HomePage() {
-  const [ready, setReady] = useState(false)
-  const onComplete = useCallback(() => setReady(true), [])
-
   return (
     <>
-      <Preloader onComplete={onComplete} />
+      <Preloader />
       <SiteNav />
       <main>
-        <Hero ready={ready} />
+        <Hero />
         <About />
         <Experience />
         <Statement />
