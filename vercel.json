@@ -1,6 +1,0 @@
-{
-  "installCommand": "cd portfolio-web && npm install",
-  "buildCommand": "cd portfolio-web && npm run build",
-  "outputDirectory": "portfolio-web/dist",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
-}

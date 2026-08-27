@@ -37,6 +37,18 @@ npm run dev
 
 Open [http://localhost:5173](http://localhost:5173) — one process serves the React UI and `/api` together.
 
+## Deploy on Vercel
+
+1. Import the GitHub repo on [vercel.com](https://vercel.com)
+2. **Root Directory:** set to `portfolio-web` (required)
+3. Framework should auto-detect **Vite**
+4. Build command: `npm run build` · Output: `dist`
+5. Deploy
+
+Do **not** use a root-level `vercel.json` with `portfolio-web/dist` when Root Directory is already `portfolio-web`.
+
+Contact form and CMS need a Node server (Railway/Render). The static Vercel deploy shows portfolio content from built-in data.
+
 ## Build for Production
 
 ```bash
