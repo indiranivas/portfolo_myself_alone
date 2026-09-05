@@ -1,12 +1,12 @@
 # Netlify + Render deployment
 
-Split hosting: **Netlify** serves the React frontend; **Render** runs the Express API (contact form, CMS, portfolio JSON).
+Split hosting: **Netlify** serves the React frontend (`frontend/`); **Render** runs the Express API (`backend/`).
 
 ## 1. Deploy API on Render
 
 1. Go to [render.com](https://render.com) → **New** → **Blueprint** (or **Web Service**)
 2. Connect GitHub repo `portfolo_myself_alone`
-3. If using Blueprint, Render reads `render.yaml` at the repo root
+3. Render reads `render.yaml` at the repo root (`rootDir: backend`)
 4. Set these **environment variables** on the service:
 
 | Variable | Example | Notes |
@@ -26,11 +26,11 @@ Split hosting: **Netlify** serves the React frontend; **Render** runs the Expres
 By default, JSON files (`portfolio.json`, `messages.json`) reset on redeploy. For persistence:
 
 1. Render dashboard → your service → **Disks** → Add disk (e.g. 1 GB)
-2. Mount path: `/opt/render/project/src/portfolio-web/server/data`
+2. Mount path: `/opt/render/project/src/backend/data`
 
 ## 2. Deploy frontend on Netlify
 
-1. Netlify already builds from `netlify.toml` (`portfolio-web` → `dist`)
+1. Netlify builds from `netlify.toml` at the repo root (`base = frontend`)
 2. **Site settings → Environment variables** → add:
 
 | Variable | Value |
@@ -44,15 +44,26 @@ No trailing slash. **Redeploy** after adding — Vite bakes this in at build tim
 ## 3. Local development
 
 ```bash
-cd portfolio-web
-cp .env.example .env   # fill MAIL_* and ADMIN_*
-npm install
-npm run dev            # UI + API together on http://localhost:5173
+# From repo root — runs API (port 3001) + Vite (port 5173)
+npm run install:all
+npm run dev
 ```
+
+Or run separately:
+
+```bash
+cd backend && cp .env.example .env   # fill MAIL_* and ADMIN_*
+cd backend && npm install && npm run dev
+
+cd frontend && npm install && npm run dev
+```
+
+Frontend proxies `/api` to `http://localhost:3001` in dev.
 
 To test against a remote API locally:
 
 ```bash
+cd frontend
 VITE_API_URL=https://portfolio-api.onrender.com npm run dev
 ```
 
@@ -61,9 +72,9 @@ VITE_API_URL=https://portfolio-api.onrender.com npm run dev
 ```
 Browser (Netlify)
     │
-    ├─ static assets (HTML/JS/CSS)  →  Netlify CDN
+    ├─ static assets (HTML/JS/CSS)  →  Netlify CDN  (frontend/)
     │
-    └─ fetch(VITE_API_URL/api/...)  →  Render Express
+    └─ fetch(VITE_API_URL/api/...)  →  Render Express  (backend/)
             ├─ /api/portfolio
             ├─ /api/contact  (+ Gmail SMTP)
             └─ /api/cms      (+ JWT auth)

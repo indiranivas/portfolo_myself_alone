@@ -9,16 +9,19 @@
 !**/.env.example
 
 # Runtime CMS data (regenerated locally)
-portfolio-web/server/data/users.json
-portfolio-web/server/data/messages.json
+backend/data/users.json
+backend/data/messages.json
 
 # OS / editor
 .DS_Store
 Thumbs.db
 *.log
 
-# Cursor local skill cache (keep design-system)
-portfolio-web/.cursor/
+# Cursor local skill cache
+frontend/.cursor/
+
+# Legacy folder (removed — use frontend/ + backend/)
+portfolio-web/
 
 # Unrelated starter
 python-getting-started/

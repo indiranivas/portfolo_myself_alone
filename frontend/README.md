@@ -29,21 +29,25 @@ Install [Node.js](https://nodejs.org/) (v18 or later).
 
 ## Getting Started
 
+From the **repo root**:
+
 ```bash
-cd portfolio-web
-npm install
+npm run install:all
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) — one process serves the React UI and `/api` together.
+- UI: [http://localhost:5173](http://localhost:5173)
+- API: [http://localhost:3001](http://localhost:3001) (proxied as `/api` in dev)
+
+Or run each folder separately — see [DEPLOY.md](../DEPLOY.md).
 
 ## Deploy: Netlify (frontend) + Render (backend)
 
-See **[DEPLOY.md](./DEPLOY.md)** for the full guide.
+See **[DEPLOY.md](../DEPLOY.md)** for the full guide.
 
 **Quick summary:**
 
-1. **Render** — deploy `portfolio-web` with `npm run start:api` (uses `render.yaml` at repo root)
+1. **Render** — deploy `backend/` (`render.yaml` at repo root)
 2. **Netlify** — set `VITE_API_URL=https://your-api.onrender.com` in site env, redeploy
 3. On Render, set `CORS_ORIGIN` to your Netlify URL and `MAIL_*` for contact email
 
@@ -51,8 +55,8 @@ See **[DEPLOY.md](./DEPLOY.md)** for the full guide.
 
 1. Go to [netlify.com](https://netlify.com) → **Add new site** → **Import from Git**
 2. Connect GitHub repo: `portfolo_myself_alone`
-3. Netlify reads `netlify.toml` at the repo root automatically:
-   - Base: `portfolio-web`
+3. Netlify reads root `netlify.toml` automatically:
+   - Base: `frontend`
    - Build: `npm run build`
    - Publish: `dist`
 4. Click **Deploy site**
@@ -62,23 +66,20 @@ Without `VITE_API_URL`, the portfolio uses built-in fallback data and Netlify Fo
 ## Deploy on Vercel
 
 1. Import the GitHub repo on [vercel.com](https://vercel.com)
-2. **Root Directory:** set to `portfolio-web` (required)
+2. **Root Directory:** set to `frontend` (required)
 3. Framework should auto-detect **Vite**
 4. Build command: `npm run build` · Output: `dist`
 5. Deploy
 
-Do **not** use a root-level `vercel.json` with `portfolio-web/dist` when Root Directory is already `portfolio-web`.
-
-Contact form and CMS need a Node server (Railway/Render). The static Vercel deploy shows portfolio content from built-in data.
+Contact form and CMS need the backend on Render. Set `VITE_API_URL` to your Render API URL.
 
 ## Build for Production
 
 ```bash
+cd frontend
 npm run build
-npm start
+npm run preview
 ```
-
-Serves the built site + API on [http://localhost:3000](http://localhost:3000).
 
 ## Tech Stack
 
@@ -94,20 +95,20 @@ Serves the built site + API on [http://localhost:3000](http://localhost:3000).
 ## Project Structure
 
 ```
-portfolio-web/
-├── public/resume.pdf
+frontend/
+├── public/
 ├── src/
 │   ├── components/
-│   │   ├── layout/      # Nav, Footer, Preloader, Theme
-│   │   ├── sections/    # Hero, Projects, Experience, etc.
-│   │   ├── three/       # 3D scene components
-│   │   └── ui/          # Shared UI components
 │   ├── data/portfolio.ts
-│   ├── hooks/useTheme.ts
-│   └── types/portfolio.ts
+│   └── ...
+└── package.json
+
+backend/
+├── data/portfolio.json
+├── routes/
 └── package.json
 ```
 
 ## Customization
 
-Portfolio content is managed via the CMS at `/login` or by editing `server/data/portfolio.json` directly.
+Portfolio content is managed via the CMS at `/login` or by editing `backend/data/portfolio.json`.

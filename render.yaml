@@ -2,15 +2,13 @@ services:
   - type: web
     name: portfolio-api
     runtime: node
-    rootDir: portfolio-web
+    rootDir: backend
     buildCommand: npm install
-    startCommand: npm run start:api
+    startCommand: npm start
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
         value: production
-      - key: API_ONLY
-        value: true
       - key: SESSION_SECRET
         generateValue: true
       - key: CORS_ORIGIN
