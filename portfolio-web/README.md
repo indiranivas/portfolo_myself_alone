@@ -49,6 +49,20 @@ Do **not** use a root-level `vercel.json` with `portfolio-web/dist` when Root Di
 
 Contact form and CMS need a Node server (Railway/Render). The static Vercel deploy shows portfolio content from built-in data.
 
+## Deploy on Netlify (recommended if Vercel shows a black screen)
+
+1. Go to [netlify.com](https://netlify.com) → **Add new site** → **Import from Git**
+2. Connect GitHub repo: `portfolo_myself_alone`
+3. Netlify reads `netlify.toml` at the repo root automatically:
+   - Base: `portfolio-web`
+   - Build: `npm run build`
+   - Publish: `dist`
+4. Click **Deploy site**
+
+No extra settings needed. After deploy, open the Netlify URL — you should see the full UI.
+
+> Contact form and CMS still need a backend; the portfolio page itself works as static HTML/JS.
+
 ## Build for Production
 
 ```bash
