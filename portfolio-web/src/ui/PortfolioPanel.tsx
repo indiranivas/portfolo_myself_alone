@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { fallbackPortfolioData as portfolioData } from '../data/portfolio'
+import { externalUrl } from '../utils/urls'
 import { useHouse } from '../house/HouseContext'
 import type { PanelId } from '../house/types'
 
@@ -199,7 +200,7 @@ const engineer = {
             LinkedIn →
           </a>
           <a
-            href={portfolioData.github.startsWith('http') ? portfolioData.github : `https://${portfolioData.github}`}
+            href={externalUrl(portfolioData.github)}
             target="_blank"
             rel="noopener noreferrer"
             className="panel-link"

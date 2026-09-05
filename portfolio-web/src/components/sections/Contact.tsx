@@ -1,6 +1,7 @@
 import { FormEvent, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { usePortfolio } from '../../context/PortfolioContext'
+import { externalUrl } from '../../utils/urls'
 
 export function Contact() {
   const { data } = usePortfolio()
@@ -117,7 +118,7 @@ export function Contact() {
               LinkedIn
             </a>
             <a
-              href={data.github.startsWith('http') ? data.github : `https://${data.github}`}
+              href={externalUrl(data.github)}
               target="_blank"
               rel="noopener noreferrer"
               className="text-paper/70 hover:text-accent transition underline-offset-4 hover:underline"

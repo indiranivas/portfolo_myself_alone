@@ -1,10 +1,11 @@
 import { motion } from 'framer-motion'
 import { usePortfolio } from '../../context/PortfolioContext'
+import { externalUrl } from '../../utils/urls'
 
 export function SiteFooter() {
   const { data } = usePortfolio()
   const year = new Date().getFullYear()
-  const github = data.github.startsWith('http') ? data.github : `https://${data.github}`
+  const github = externalUrl(data.github)
 
   return (
     <footer className="mt-8 bg-hot text-ink">

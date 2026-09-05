@@ -17,8 +17,12 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
 
   const refresh = async () => {
     try {
-      const portfolio = (await api.getPortfolio()) as PortfolioData
-      setData(portfolio)
+      const portfolio = (await api.getPortfolio()) as Partial<PortfolioData>
+      if (portfolio?.name && portfolio?.email) {
+        setData({ ...fallbackPortfolioData, ...portfolio })
+      } else {
+        setData(fallbackPortfolioData)
+      }
     } catch {
       setData(fallbackPortfolioData)
     } finally {
