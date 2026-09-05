@@ -3,6 +3,8 @@
   command = "npm run build"
   publish = "dist"
 
+# Set VITE_API_URL in Netlify env to your Render API URL (see portfolio-web/DEPLOY.md)
+
 [[redirects]]
   from = "/*"
   to = "/index.html"

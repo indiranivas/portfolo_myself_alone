@@ -1,5 +1,6 @@
 import 'dotenv/config'
 import express from 'express'
+import cors from 'cors'
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -11,13 +12,41 @@ import { initDb } from './db.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const isProd = process.env.NODE_ENV === 'production' || process.argv.includes('--prod')
+const apiOnly = process.env.API_ONLY === 'true' || process.argv.includes('--api-only')
 const PORT = Number(process.env.PORT) || (isProd ? 3000 : 5173)
+
+function createCorsMiddleware() {
+  const origins = (process.env.CORS_ORIGIN || '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean)
+
+  return cors({
+    origin(origin, callback) {
+      if (!origin || origins.length === 0 || origins.includes('*') || origins.includes(origin)) {
+        callback(null, true)
+        return
+      }
+      callback(null, false)
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+}
 
 async function createServer() {
   const app = express()
   initDb()
 
+  if (apiOnly) {
+    app.use(createCorsMiddleware())
+  }
+
   app.use(express.json({ limit: '2mb' }))
+
+  app.get('/api/health', (_req, res) => {
+    res.json({ ok: true, service: 'portfolio-api' })
+  })
 
   app.use('/api/auth', authRoutes)
   app.use('/api/portfolio', portfolioRoutes)
@@ -32,6 +61,10 @@ async function createServer() {
       appType: 'spa',
     })
     app.use(vite.middlewares)
+  } else if (apiOnly) {
+    app.use((_req, res) => {
+      res.status(404).json({ error: 'Not found' })
+    })
   } else {
     const distPath = path.join(__dirname, '../dist')
     if (!fs.existsSync(distPath)) {
@@ -46,7 +79,8 @@ async function createServer() {
   }
 
   app.listen(PORT, () => {
-    console.log(`App running on http://localhost:${PORT}`)
+    const mode = apiOnly ? 'API only' : isProd ? 'production' : 'development'
+    console.log(`App running on http://localhost:${PORT} (${mode})`)
   })
 }
 

@@ -1,4 +1,4 @@
-const API_BASE = '/api'
+import { getApiBase } from '../utils/apiBase'
 
 function getToken() {
   return localStorage.getItem('cms_token')
@@ -15,7 +15,7 @@ export async function apiFetch<T = unknown>(
   }
   if (token) headers.Authorization = `Bearer ${token}`
 
-  const res = await fetch(`${API_BASE}${path}`, { ...options, headers })
+  const res = await fetch(`${getApiBase()}${path}`, { ...options, headers })
   const contentType = res.headers.get('content-type') || ''
   if (!contentType.includes('application/json')) {
     throw new Error('Expected JSON response')

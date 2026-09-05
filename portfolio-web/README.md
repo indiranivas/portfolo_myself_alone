@@ -37,6 +37,28 @@ npm run dev
 
 Open [http://localhost:5173](http://localhost:5173) — one process serves the React UI and `/api` together.
 
+## Deploy: Netlify (frontend) + Render (backend)
+
+See **[DEPLOY.md](./DEPLOY.md)** for the full guide.
+
+**Quick summary:**
+
+1. **Render** — deploy `portfolio-web` with `npm run start:api` (uses `render.yaml` at repo root)
+2. **Netlify** — set `VITE_API_URL=https://your-api.onrender.com` in site env, redeploy
+3. On Render, set `CORS_ORIGIN` to your Netlify URL and `MAIL_*` for contact email
+
+## Deploy on Netlify only (static fallback)
+
+1. Go to [netlify.com](https://netlify.com) → **Add new site** → **Import from Git**
+2. Connect GitHub repo: `portfolo_myself_alone`
+3. Netlify reads `netlify.toml` at the repo root automatically:
+   - Base: `portfolio-web`
+   - Build: `npm run build`
+   - Publish: `dist`
+4. Click **Deploy site**
+
+Without `VITE_API_URL`, the portfolio uses built-in fallback data and Netlify Forms for contact.
+
 ## Deploy on Vercel
 
 1. Import the GitHub repo on [vercel.com](https://vercel.com)
@@ -48,20 +70,6 @@ Open [http://localhost:5173](http://localhost:5173) — one process serves the R
 Do **not** use a root-level `vercel.json` with `portfolio-web/dist` when Root Directory is already `portfolio-web`.
 
 Contact form and CMS need a Node server (Railway/Render). The static Vercel deploy shows portfolio content from built-in data.
-
-## Deploy on Netlify (recommended if Vercel shows a black screen)
-
-1. Go to [netlify.com](https://netlify.com) → **Add new site** → **Import from Git**
-2. Connect GitHub repo: `portfolo_myself_alone`
-3. Netlify reads `netlify.toml` at the repo root automatically:
-   - Base: `portfolio-web`
-   - Build: `npm run build`
-   - Publish: `dist`
-4. Click **Deploy site**
-
-No extra settings needed. After deploy, open the Netlify URL — you should see the full UI.
-
-> Contact form and CMS still need a backend; the portfolio page itself works as static HTML/JS.
 
 ## Build for Production
 

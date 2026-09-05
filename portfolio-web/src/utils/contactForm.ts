@@ -1,3 +1,5 @@
+import { getApiBase, hasRemoteApi } from './apiBase'
+
 export interface ContactPayload {
   name: string
   email: string
@@ -5,20 +7,18 @@ export interface ContactPayload {
   subject?: string
 }
 
-/** Dev uses Express API; production on Netlify uses Netlify Forms. */
-export async function submitContact(payload: ContactPayload): Promise<void> {
+async function submitViaApi(payload: ContactPayload): Promise<void> {
   const subject = payload.subject?.trim() || 'Portfolio inquiry'
+  const res = await fetch(`${getApiBase()}/contact`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ...payload, subject }),
+  })
+  if (!res.ok) throw new Error('Request failed')
+}
 
-  if (import.meta.env.DEV) {
-    const res = await fetch('/api/contact', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...payload, subject }),
-    })
-    if (!res.ok) throw new Error('Request failed')
-    return
-  }
-
+async function submitViaNetlifyForms(payload: ContactPayload): Promise<void> {
+  const subject = payload.subject?.trim() || 'Portfolio inquiry'
   const body = new URLSearchParams({
     'form-name': 'contact',
     name: payload.name,
@@ -33,4 +33,13 @@ export async function submitContact(payload: ContactPayload): Promise<void> {
     body: body.toString(),
   })
   if (!res.ok) throw new Error('Request failed')
+}
+
+/** Local dev and Render API use Express; Netlify without VITE_API_URL falls back to Netlify Forms. */
+export async function submitContact(payload: ContactPayload): Promise<void> {
+  if (import.meta.env.DEV || hasRemoteApi()) {
+    await submitViaApi(payload)
+    return
+  }
+  await submitViaNetlifyForms(payload)
 }
